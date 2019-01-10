@@ -6,9 +6,11 @@ cv2.namedWindow("test")
 
 img_counter = 0
 
+#face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+face_cascade = cv2.CascadeClassifier('haarcascade_lefteye_2splits.xml')
 while True:
     ret, frame = cam.read()
-    cv2.imshow("test", frame)
+
     if not ret:
         break
     k = cv2.waitKey(1)
@@ -23,6 +25,12 @@ while True:
         cv2.imwrite(img_name, frame)
         print("{} written!".format(img_name))
         img_counter += 1
+
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, 1.3, 5)
+    for (x,y,w,h) in faces:
+        face_frame = frame[y:y + h, x:x + w]
+    cv2.imshow("Face test", face_frame)
 
 cam.release()
 
